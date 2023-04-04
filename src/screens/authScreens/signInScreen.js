@@ -3,20 +3,40 @@ import React, {useState, useRef}  from "react";
 import { View, Text, StyleSheet, Dimensions, TextInput } from "react-native";
 import {colors, parameters, title} from "../../global/styles"
 import * as Animatable from 'react-native-animatable'
-
 import {Icon, Button} from 'react-native-elements'
+
+import { auth } from "../../../config/firebase";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 import Header from "../../components/header";
 
+    
 export default function SignInScreen({navigation}){
-
-    const[textInput2Fossued, setTextInput2Fossued] = useState(false)
-
-    const textInput1 = useRef(1)
-    const textInput2 = useRef(2)
-
+    const[isSignIn, setIsSignedIn] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+
+    const signUp = () => {
+        createUserWithEmailAndPassword(auth, email, password)
+        .then((re) => {
+            console.log(re);
+            setIsSignedIn(true)
+        })
+        .catch((re) => {
+            console.log(re);
+        })
+    }
+
+    const signInUser = () =>{
+        signInWithEmailAndPassword(auth, email, password)
+        .then((re) => {
+            console.log(re);
+            setIsSignedIn(true)
+        })
+        .catch((re) => {
+            console.log(re);
+        })
+    }
 
     return(
         <View>
@@ -36,52 +56,27 @@ export default function SignInScreen({navigation}){
                     <TextInput 
                         style={styles.textInput1}
                         placeholder="Email"
-                        ref={textInput1}
-
-                        onFocus={()=>{
-                            setTextInput2Fossued(false)
-                        }}
-                        onBlur={()=>{
-                            setTextInput2Fossued(true)
-                        }}
-
                         value={email}
                         onChangeText={text => setEmail(text)}
                     />
                 </View>
 
                 <View style={styles.textInput2}>
-                <Animatable.View>
-                    <Icon 
-                        name ="lock"
-                        iconStyle={{color:colors.grey3}}
-                        type ="material"
-                    />
-                </Animatable.View>
                     <TextInput 
                             style={{width:'80%'}}
                             placeholder="Password"
-                            ref={textInput2}
-
                             value={password}
                             onChangeText={text => setPassword(text)}
                     />
-                <Animatable.View animation={textInput2Fossued?"":"fadeInLeft"} duration={400}>
-                    <Icon 
-                        name ="visibility-off"
-                        iconStyle={{color:colors.grey3}}
-                        type ="material"
-                        style={{marginRight:10}}
-                    />
-                </Animatable.View>
                 </View>
+
                 <View style={{marginHorizontal:20, marginVertical:30}}>
                         <Button
                             title='SIGN-IN'
                             buttonStyle={parameters.styledButton}
                             titleStyle={parameters.buttonTitle}
 
-                            onPress={()=>{navigation.navigate('HomeScreen')}}
+                            onPress={signInUser}
                          />
                 </View>
 
@@ -99,6 +94,8 @@ export default function SignInScreen({navigation}){
                     title="Buat Akun"
                     buttonStyle={styles.createButton}
                     titleStyle={styles.createButtonTitle}
+
+                    onPress={signUp}
                 />
             </View>
         </View>
