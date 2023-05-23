@@ -4,7 +4,12 @@ import {View, Text, StyleSheet, TouchableOpacity, ScrollView} from 'react-native
 import {Icon} from "react-native-elements";
 import { colors } from "../global/styles";
 import HomeHeader from "../components/homeHeader";
+import { FlatList } from "react-native-gesture-handler";
+import { restaurantData } from "../global/data"; 
+import FoodCard from "../components/foodCard";
+import { Dimensions } from "react-native";
 
+const SCREEN_WIDTH = Dimensions.get('window').width
 export default function HomeScreen(){
     const [delivery, setDelivery] = useState(true)
     return(
@@ -58,12 +63,74 @@ export default function HomeScreen(){
                 </View>
 
                 <View style={{marginLeft:15, marginTop:20}}>
-                    <Text style={styles.headerText}>Kategori</Text>
+                    <Text style={styles.headerText}>Pesan Sekarang!</Text>
+                </View>
+
+                <View style={{marginRight:10}}>
+                    <FlatList 
+                        style={{marginTop:10, marginBottom:10}}
+                        horizontal={true}
+                        data={restaurantData}
+                        keyExtractor={(item, index)=>index.toString()}
+                        showsHorizontalScrollIndicator={false}
+                        renderItem={({item})=>(
+                            <View>
+                                <FoodCard 
+                                    screenWidth = {SCREEN_WIDTH*0.8}
+                                    image={item.images}
+                                    restaurantName={item.restaurantName}
+                                    distance={item.distance}
+                                    averageReview={item.averageReview}
+                                    numberOfReview={item.numberOfReview}
+                                />
+                            </View>)}
+                    />
                 </View>
 
                 <View style={{marginLeft:15, marginTop:20}}>
-                    <Text style={styles.headerText}>Pesan Sekarang!</Text>
+                    <Text style={styles.headerText}>Promo!</Text>
                 </View>
+
+                <View style={{marginRight:10}}>
+                    <FlatList 
+                        style={{marginTop:10, marginBottom:10}}
+                        horizontal={true}
+                        data={restaurantData}
+                        keyExtractor={(item, index)=>index.toString()}
+                        showsHorizontalScrollIndicator={false}
+                        renderItem={({item})=>(
+                            <View>
+                                <FoodCard 
+                                    screenWidth = {SCREEN_WIDTH*0.8}
+                                    image={item.images}
+                                    restaurantName={item.restaurantName}
+                                    distance={item.distance}
+                                    averageReview={item.averageReview}
+                                    numberOfReview={item.numberOfReview}
+                                />
+                            </View>)}
+                    />
+                </View>
+
+            <View style={{marginLeft:15, marginTop:20}}>
+                <Text style={styles.headerText}>Di Dekatmu</Text>
+            </View>
+            <View style={{width:SCREEN_WIDTH, paddingTop:10}}>
+                {
+                    restaurantData.map(item =>(
+                        <View key={item.id} style={{paddingBottom:20}}>
+                            <FoodCard 
+                                screenWidth = {SCREEN_WIDTH*0.95}
+                                image={item.images}
+                                restaurantName={item.restaurantName}
+                                distance={item.distance}
+                                averageReview={item.averageReview}
+                                numberOfReview={item.numberOfReview}
+                            />
+                        </View>
+                    ))
+                }
+            </View>
             </ScrollView>
         </View>
     )

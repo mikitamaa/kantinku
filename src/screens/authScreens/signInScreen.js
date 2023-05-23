@@ -9,6 +9,7 @@ import { auth } from "../../../config/firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 import Header from "../../components/header";
+import RootClientTab from "../../navigation/ClientTab";
 
     
 export default function SignInScreen({navigation}){
@@ -36,6 +37,8 @@ export default function SignInScreen({navigation}){
         .catch((re) => {
             console.log(re);
         })
+
+        navigation.navigate('RootClientTab')
     }
 
     return(
